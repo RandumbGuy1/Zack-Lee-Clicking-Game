@@ -12,7 +12,7 @@ class Player:
   def registerClick(self, buttonPressed):
     self.click_count += 1
 
-    if (self.click_count > self.xp_goal):
+    if (self.click_count >= self.xp_goal):
       self.level += 1
       self.click_count = 0
       self.xp_goal = (self.level * 5) * self.level
@@ -57,22 +57,25 @@ zackImage = ImageTk.PhotoImage(Image.open("Zack_lee_Evolutions/" + evolutions[pl
 zackLabel = tkinter.Label(image=zackImage)
 zackLabel.place(x=850, y=350)
 
+prev_level = player.level
 #Resgister button click input
 def onClick(event):
   global zackImage
   global zackLabel
+  global prev_level
 
   player.registerClick(button)
-
   button.configure(text= "\n\n" + str(player.click_count) + "\n\n")
-  level.configure(text="Level: " + str(player.level) + ", Click Goal: " + str(player.xp_goal))
-  current.configure(text="You are currently: " + evolutionTitles[player.level - 1] + " Zack Lee")
 
-  zackImage = ImageTk.PhotoImage(Image.open("Zack_lee_Evolutions/" + evolutions[player.level - 1]))
-  zackLabel = tkinter.Label(image=zackImage)
-  zackLabel.place(x=850, y=350)
-  window.mainloop()
+  if (player.level != prev_level):
+    level.configure(text="Level: " + str(player.level) + ", Click Goal: " + str(player.xp_goal))
+    current.configure(text="You are currently: " + evolutionTitles[player.level - 1] + " Zack Lee")
+
+    zackImage = ImageTk.PhotoImage(Image.open("Zack_lee_Evolutions/" + evolutions[player.level - 1]))
+    zackLabel = tkinter.Label(image=zackImage)
+    zackLabel.place(x=850, y=350)
+
+    prev_level = player.level
 
 button.bind("<ButtonRelease-1>", onClick)
 window.mainloop()
-
